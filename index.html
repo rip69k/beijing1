@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>@koren</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
+<style>
+html, body {
+  margin:0; padding:0; width:100%; height:100%;
+  overflow:hidden;
+  font-family:'Inter',sans-serif;
+  background:#0d001a; color:#fff;
+}
+#bg-video {
+  position: fixed; top:0; left:0;
+  width:100%; height:100%;
+  object-fit:cover;
+  z-index:0;
+  filter:blur(6px) brightness(0.6);
+}
+
+/* Rain */
+.rain { position: fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:1; }
+.rain-drop {
+  position:absolute;
+  width:1px; height:15px;
+  background: rgba(255,255,255,0.6);
+  opacity:0;
+  animation: fall linear infinite;
+}
+@keyframes fall {
+  0%{transform:translateY(-100%) translateX(0); opacity:0}
+  10%{opacity:.8}
+  100%{transform:translateY(100vh) translateX(100px); opacity:0}
+}
+
+/* === LIQUID GLASS UPGRADE === */
+.main-card {
+  background: rgba(255,255,255,0.05);
+  border:1px solid rgba(255,255,255,0.15);
+  backdrop-filter: blur(25px) saturate(180%);
+  -webkit-backdrop-filter: blur(25px) saturate(180%);
+  padding: 3rem 3.5rem;
+  border-radius: 1.5rem;
+  max-width: 580px;
+  text-align:center;
+  z-index:2;
+  position: relative;
+  box-shadow:
+    inset 0 0 25px rgba(255,255,255,0.05),
+    0 0 35px rgba(255,255,255,0.2);
+  overflow: hidden;
+}
+.main-card::before {
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,0.15),rgba(255,255,255,0.02));
+  opacity:0.3;
+  mix-blend-mode:overlay;
+  pointer-events:none;
+}
+
+.glow-text {
+  text-shadow:0 0 12px #fff, 0 0 28px #fff, 0 0 50px rgba(255,255,255,.9);
+  font-size: 2.25rem;
+}
+
+/* Splash */
+#splash-screen {
+  position: fixed; top:0; left:0; width:100%; height:100%;
+  display:flex; justify-content:center; align-items:center;
+  background: rgba(13,0,26,0.85);
+  cursor:pointer; z-index:999;
+  transition: opacity 1s ease;
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+}
+#splash-screen h1 {
+  font-family:'Press Start 2P',cursive;
+  font-size:2.5rem; color:#fff;
+}
+
+/* Cards */
+.card {
+  display:flex; align-items:center; justify-content:space-between;
+  background: rgba(255,255,255,0.05);
+  border:1px solid rgba(255,255,255,0.15);
+  padding:1rem 1.75rem;
+  border-radius:1rem;
+  margin-top:1rem;
+  text-decoration:none;
+  transition: all .3s ease;
+  backdrop-filter: blur(18px) saturate(180%);
+  -webkit-backdrop-filter: blur(18px) saturate(180%);
+  box-shadow:
+    inset 0 0 25px rgba(255,255,255,0.03),
+    0 0 25px rgba(255,255,255,0.2);
+}
+.card:hover {
+  background: rgba(255,255,255,0.12);
+  transform: translateY(-2px);
+  box-shadow:
+    0 0 18px rgba(255,255,255,.7),
+    inset 0 0 25px rgba(255,255,255,0.05);
+}
+.card-info { display:flex; align-items:center; gap:1rem; }
+.card-info div { display:flex; flex-direction:column; justify-content:center; }
+.card-info img {
+  width:50px; height:50px;
+  border-radius:50%;
+  background:#fff;
+  object-fit:cover;
+  box-shadow: 0 0 10px rgba(255,255,255,0.3);
+}
+.card-stats { font-size:0.85rem; color: rgba(255,255,255,0.7); }
+
+.button {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.25);
+  padding: 0.35rem 1rem;
+  border-radius: 9999px;
+  font-size:0.85rem;
+  color:#fff;
+  transition: all .2s ease;
+  cursor:pointer;
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
+  box-shadow:
+    inset 0 0 10px rgba(255,255,255,0.05),
+    0 0 10px rgba(255,255,255,0.3);
+}
+.button:hover {
+  border-color:#fff;
+  background: rgba(255,255,255,0.12);
+}
+
+.separator {
+  border:none; height:1px;
+  background: rgba(255,255,255,0.15);
+  margin:1rem 0;
+}
+
+.discord-profile-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 1.25rem;
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
+
+  box-shadow:
+    inset 0 0 20px rgba(255,255,255,0.1),
+    0 0 25px rgba(255,255,255,0.2);
+  padding: 1.5rem 2rem;
+  transition: all 0.3s ease;
+}
+
+.discord-profile-card:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    inset 0 0 25px rgba(255,255,255,0.2),
+    0 0 35px rgba(255,255,255,0.3);
+}
+
+.discord-profile-card img {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(255,255,255,0.3);
+  box-shadow: 0 0 12px rgba(255,255,255,0.4);
+}
+
+.cursor-petal {
+  position: absolute;
+  background-image: url('https://wallpapers.com/images/hd/white-heart-shape-graphic-tdhw3mbvbcbpup05.png');
+  background-size: cover;
+  pointer-events: none;
+  z-index: 10;
+  opacity: 0;
+  mix-blend-mode: lighten;
+  animation: petalFade 0.75s ease-in-out forwards;
+}
+
+@keyframes petalFade {
+  0% { opacity: 0; transform: scale(0.6) rotate(0deg); }
+  20% { opacity: 0.9; transform: scale(1) rotate(45deg); }
+  80% { opacity: 0.8; transform: scale(1) rotate(90deg); }
+  100% { opacity: 0; transform: scale(0.7) rotate(120deg); }
+}
+
+/* Volume slider */
+#volume-control {
+  position: fixed;
+  top: 50%;
+  right: 3rem;
+  transform: translateY(-50%);
+  height: 150px;
+  width: 60px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.15);
+  backdrop-filter: blur(25px) saturate(180%);
+  -webkit-backdrop-filter: blur(25px) saturate(180%);
+  border-radius: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 1rem;
+  z-index: 5;
+  box-shadow:
+    inset 0 0 20px rgba(255,255,255,0.1),
+    0 0 25px rgba(255,255,255,0.2);
+}
+
+#volume-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 150px;
+  height: 8px;
+  background: rgba(255,255,255,0.12);
+  border-radius: 9999px;
+  accent-color: #fff;
+  transform: rotate(-90deg);
+  cursor: pointer;
+}
+
+#volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  cursor: pointer;
+  box-shadow: 0 0 8px rgba(255,255,255,0.5);
+}
+
+#volume-slider::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  cursor: pointer;
+  box-shadow: 0 0 8px rgba(255,255,255,0.5);
+}
+</style>
+
+</head>
+<body>
+
+<video id="bg-video" src="video.mp4" loop autoplay playsinline muted></video>
+
+<div class="rain" id="rain-container"></div>
+
+<div id="splash-screen"><h1 class="glow-text">tap nigga 💔</h1></div>
+
+<main id="main-content" class="flex items-center justify-center w-full h-screen hidden relative">
+  <div class="main-card">
+
+    <a href="https://discord.com/users/1354256543788568729" target="_blank" class="discord-profile-card">
+      <img id="discord-avatar" src="" alt="Avatar">
+      <h1 id="username-title" class="glow-text mb-1"></h1>
+      <div id="discord-status" class="text-purple-400 text-sm font-medium">Checking status...</div>
+      <div id="discord-info" class="text-gray-300 text-sm">Loading...</div>
+    </a>
+
+    <hr class="separator" />
+
+    <h1 class="glow-text" style="font-size: 1.25rem;">
+  Server management  discord.gg/craven<br>
+  join fr
+</h1>
+
+    <hr class="separator" />
+
+    <a id="discord-server-card" href="#" target="_blank" class="card">
+      <div class="card-info">
+        <img id="discord-server-icon" src="https://placehold.co/50x50/b48cf2/1a0033?text=DC" alt="Server Icon">
+        <div>
+          <div id="discord-server-name" class="font-semibold text-white text-lg">Craven</div>
+          <div id="discord-server-stats" class="card-stats"></div>
+        </div>
+      </div>
+      <div class="button">JOIN</div>
+    </a>
+
+    <a href="https://www.roblox.com/users/9850873736/profile" target="_blank" class="card roblox-card">
+      <div class="card-info">
+        <img src="https://tr.rbxcdn.com/30DAY-AvatarHeadshot-5D63C7B0BC521AD720E1C7EAC307B2FA-Png/150/150/AvatarHeadshot/Webp/noFilter" alt="Roblox Icon">
+        <div>
+          <div class="font-semibold text-white text-lg">@kkore_n</div>
+          <div class="card-stats">Friends: 20 | Followers: 2.1K</div>
+        </div>
+      </div>
+      <div class="button">VIEW</div>
+    </a>
+  </div>
+
+  <div id="volume-control">
+    <input id="volume-slider" type="range" min="0" max="1" step="0.01" value="0.5">
+  </div>
+</main>
+
+<script>
+const bgVideo=document.getElementById('bg-video');
+const volumeSlider=document.getElementById('volume-slider');
+bgVideo.volume=volumeSlider.value;
+volumeSlider.addEventListener('input',e=>bgVideo.volume=e.target.value);
+
+// Typewriter
+const DISPLAY_SEQUENCE=['l','la','lar','larp', 'larp', 'lar', 'la', 'l'];
+let seqIndex=0,charIndex=0;
+const h1El=document.getElementById('username-title');
+const titleEl=document.getElementsByTagName('title')[0];
+function typeWriterLoop(){
+  const target=DISPLAY_SEQUENCE[seqIndex];
+  if(charIndex<target.length)charIndex++;
+  else if(charIndex>target.length)charIndex--;
+  h1El.textContent=target.substring(0,charIndex)||'\u00A0';
+  titleEl.textContent=target.substring(0,charIndex)||'My Cool Site';
+  let delay=(charIndex===target.length)?750:(charIndex<target.length?100:50);
+  if(charIndex===target.length)seqIndex=(seqIndex+1)%DISPLAY_SEQUENCE.length;
+  setTimeout(typeWriterLoop,delay);
+}
+
+// Rain
+function initRain(){
+  const container=document.getElementById('rain-container');
+  for(let i=0;i<80;i++){
+    const drop=document.createElement('div');
+    drop.classList.add('rain-drop');
+    drop.style.left=Math.random()*100+'vw';
+    drop.style.top=Math.random()*100+'vh';
+    drop.style.width=Math.random()*2+1+'px';
+    drop.style.animationDuration=(Math.random()*0.8+0.4)+'s';
+    drop.style.animationDelay=Math.random()*5+'s';
+    container.appendChild(drop);
+  }
+}
+
+// Rose petal cursor
+let lastParticleTime = 0;
+document.addEventListener('mousemove', e => {
+  const now = Date.now();
+  if (now - lastParticleTime < 100) return;
+  lastParticleTime = now;
+
+  const petal = document.createElement('div');
+  petal.className = 'cursor-petal';
+
+  const spreadX = (Math.random() - 0.5) * 40;
+  const spreadY = (Math.random() - 0.5) * 40;
+  petal.style.left = (e.clientX + spreadX) + 'px';
+  petal.style.top = (e.clientY + spreadY) + 'px';
+
+  const size = 10 + Math.random() * 10;
+  const rotate = Math.random() * 360;
+  petal.style.width = size + 'px';
+  petal.style.height = size + 'px';
+  petal.style.transform = `rotate(${rotate}deg)`;
+
+  document.body.appendChild(petal);
+
+  petal.addEventListener('animationend', () => petal.remove());
+});
+
+// Roblox
+function formatNumber(num){return num>=1000?(num/1000).toFixed(1).replace(/\.0$/,'')+'K':num.toString();}
+async function fetchRobloxUserData(){
+  try{
+    const proxy='https://corsproxy.io/?';
+    const userData=await fetch(`${proxy}https://users.roblox.com/v1/users/9850873736`).then(r=>r.json());
+    const friendsData=await fetch(`${proxy}https://friends.roblox.com/v1/users/9850873736/friends/count`).then(r=>r.json());
+    const followersData=await fetch(`${proxy}https://friends.roblox.com/v1/users/9850873736/followers/count`).then(r=>r.json());
+    document.querySelector('.roblox-card .font-semibold').textContent=userData.name||'Roblox User';
+    document.querySelector('.roblox-card .card-stats').textContent=`Friends: ${friendsData.count||0} | Followers: ${formatNumber(followersData.count||0)}`;
+  }catch(e){console.error(e);}
+}
+
+// Discord
+async function fetchDiscordLanyard(userId){
+  try{
+    const res=await fetch(`https://api.lanyard.rest/v1/users/${userId}`);
+    const data=await res.json();
+    const user=data.data;
+    document.getElementById('discord-avatar').src=`https://cdn.discordapp.com/avatars/${user.discord_user.id}/${user.discord_user.avatar}.png`;
+    const username=user.discord_user.username;
+    const activity=user.activities.find(a=>a.type===0);
+    const activityText=activity?activity.name:"Nothing";
+    const statusEl=document.getElementById('discord-status');
+    const status=user.discord_status;
+    let statusText="Offline 🌑",statusColor="#777";
+    if(status==="online"){statusText="Online 🟢";statusColor="#00ff00";}
+    else if(status==="idle"){statusText="Idle 🌙";statusColor="#c9a8ff";}
+    else if(status==="dnd"){statusText="Do Not Disturb 🔴";statusColor="#ff0000";}
+    statusEl.textContent=statusText;
+    statusEl.style.color=statusColor;
+    document.getElementById('discord-info').textContent=`Playing: ${activityText} | Discord User: ${username}`;
+  }catch(e){console.error(e);}
+}
+
+async function fetchDiscordServer(inviteCode){
+  try{
+    const res=await fetch(`https://discord.com/api/v10/invites/${inviteCode}?with_counts=true`).then(r=>r.json());
+    const guild=res.guild;
+    document.getElementById('discord-server-name').textContent=guild.name||'Server';
+    document.getElementById('discord-server-stats').textContent=`Online: ${res.approximate_presence_count||0} | Total: ${res.approximate_member_count||0}`;
+    document.getElementById('discord-server-icon').src=guild.icon?`https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png?size=80`:'https://placehold.co/50x50/b48cf2/1a0033?text=DC';
+    document.getElementById('discord-server-card').href=`https://discord.gg/${inviteCode}`;
+  }catch(e){console.error(e);}
+}
+
+document.getElementById('splash-screen').addEventListener('click',()=>{
+  bgVideo.muted = false; 
+  if (bgVideo.paused) bgVideo.play().catch(e => console.warn("Autoplay failed:", e));
+  document.getElementById('main-content').classList.remove('hidden');
+  document.getElementById('splash-screen').style.opacity=0;
+  setTimeout(()=>document.getElementById('splash-screen').remove(),1000);
+  typeWriterLoop();
+  initRain();
+  fetchRobloxUserData();
+  fetchDiscordLanyard('1400993069033066669');
+  fetchDiscordServer('craven');
+});
+</script>
+</body>
+</html>
